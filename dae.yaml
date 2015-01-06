@@ -1,19 +1,20 @@
 !obj:pylearn2.train.Train {
     dataset: &train !obj:lines_dataset.Lines {
-        shape : 12
+        shape : 20,
+        nb : 1000
     },
     model: !obj:pylearn2.models.autoencoder.DenoisingAutoencoder {
-        nvis : 144,
-        nhid : 100,
+        nvis : 400,
+        nhid : 2,
         irange : 0.05,
         corruptor: !obj:pylearn2.corruption.BinomialCorruptor {
-            corruption_level: .2,
+            corruption_level: .4,
         },
         act_enc: "tanh",
         act_dec: "tanh",    # Linear activation on the decoder side.
     },
     algorithm: !obj:pylearn2.training_algorithms.sgd.SGD {
-        learning_rate : 1e-4,
+        learning_rate : 1e-5,
         learning_rule : !obj:pylearn2.training_algorithms.learning_rule.AdaDelta {},
         batch_size : 10,
         monitoring_batches : 10,
