@@ -20,13 +20,16 @@ def gen(number, shape, rng):
         cc = cc[cc < shape[1]]
         images[i, rr, cc] = 1
         hidden.append( (theta, r) )
-    hidden  = np.array(hidden)
-    return images.astype(np.float32)
+    labels  = np.array(hidden)
+    return images.astype(np.float32), labels.astype(np.float32)
 
 class Lines(DenseDesignMatrix):
-    
-    def __init__(self, shape=20, nb=100):
+
+    def __init__(self, shape=20, nb=100, switch_images_by_labels=False):
         self.shape = shape
-        images = gen(nb, (self.shape, self.shape), rng=np.random)
+        images, labels = gen(nb, (self.shape, self.shape), rng=np.random)
         images = images.reshape( (images.shape[0], np.prod(images.shape[1:])) )
-        super(Lines, self).__init__(X=images, view_converter=DefaultViewConverter( (shape, shape, 1)  ) )
+
+        if switch_images_by_labels is True:
+            images, labels = labels, images
+        super(Lines, self).__init__(X=images, y=labels, view_converter=DefaultViewConverter( (shape, shape, 1)  ) )
